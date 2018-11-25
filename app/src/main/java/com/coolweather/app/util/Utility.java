@@ -116,8 +116,7 @@ public class Utility {
      * 将服务器返回的所有天气其信息存储到SharedPreferences文件中
      */
     public static void saveWeatherInfo(Context context,String cityName,String weatherCode,
-                                       String temp1,String temp2,String weatherDesp,
-                                       String publishTime){
+                                       String temp1,String temp2,String weatherDesp,String publishTime){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日",Locale.CHINA);
         SharedPreferences.Editor editor = PreferenceManager
                 .getDefaultSharedPreferences(context).edit();

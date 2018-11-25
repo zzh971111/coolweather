@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ import com.coolweather.app.service.AutoUpdateService;
 import com.coolweather.app.util.HttpCallbackListener;
 import com.coolweather.app.util.HttpUtil;
 import com.coolweather.app.util.Utility;
+
+
 
 public class WeatherActivity extends Activity implements View.OnClickListener {
     private LinearLayout weatherInfoLayout;
@@ -54,6 +57,11 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
      */
     private Button refreshWeather;
 
+    /**
+     *添加城市按钮
+     */
+    private Button addCounty;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -82,8 +90,10 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         }
         switchCity = (Button) findViewById(R.id.switch_city);
         refreshWeather = (Button) findViewById(R.id.refresh_weather);
+        addCounty = (Button) findViewById(R.id.add_county);
         switchCity.setOnClickListener(this);
         refreshWeather.setOnClickListener(this);
+        addCounty.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +113,12 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                     queryWeatherInfo(weatherCode);
                 }
                 break;
+            case R.id.add_county:
+                Intent intent1 =new Intent(this,AddCityActivity.class);
+                startActivity(intent1);
+                finish();
+                break;
+
              default:
                  break;
         }
@@ -170,7 +186,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
      */
     private void showWeather(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        cityNameText.setText(prefs.getString("city_Name",""));
+        cityNameText.setText(prefs.getString("city_name",""));
         temp1Text.setText(prefs.getString("temp1",""));
         temp2Text.setText(prefs.getString("temp2",""));
         weatherDespText.setText(prefs.getString("weather_desp",""));
