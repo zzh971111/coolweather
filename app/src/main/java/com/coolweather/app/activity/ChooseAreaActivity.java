@@ -112,9 +112,6 @@ public class ChooseAreaActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int index, long arg3) {
-
-                Data data=(Data)getApplication();
-
                 if (currentLevel == LEVEL_PROVINCE){
                     selectedProvince = provinceList.get(index);
                     queryCities();
@@ -122,15 +119,15 @@ public class ChooseAreaActivity extends Activity {
                     selectedCity = cityList.get(index);
                     queryCounties();
                 }else if (currentLevel == LEVEL_COUNTY){
-                    //String countyCode="111";
                     String countyCode = countyList.get(index).getCountyCode();
-                    data.setCountyCode(countyCode);
-                    System.out.println("全局对象="+ data.getCountyCode());
+                    String countyName = countyList.get(index).getCountyName();
+                    System.out.println("*********CountyName***********"+countyName);
                     //已经获取了城市且从AddCityActivity过来
                     if (isFromAddCityActivity){
 
                         Intent intent = new Intent(ChooseAreaActivity.this, AddCityActivity.class);
                         intent.putExtra("county_code",countyCode);
+                        intent.putExtra("county_name",countyName);
 
                         Log.i("-----",countyCode);
                         startActivity(intent);

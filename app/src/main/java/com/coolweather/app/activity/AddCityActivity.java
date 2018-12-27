@@ -54,42 +54,100 @@ public class AddCityActivity extends Activity implements View.OnClickListener{
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,dataList);
         listView.setAdapter(adapter);
         coolWeatherDB = CoolWeatherDB.getInstance(this);
+        Data data = (Data) getApplication();
+
+        //判断是否已添加城市
+        if(data.getCountyName1().equals("1")) {
 
 
-        String countyCode =getIntent().getStringExtra("county_code");
-        System.out.println("countyCode111"+countyCode);
-        if(countyCode!=null) {
+
+            String countyCode = getIntent().getStringExtra("county_code");
+            String countyName = getIntent().getStringExtra("county_name");
+
+            if (countyCode != null) {
+
+                //判断是不是第一次添加
+                if (data.getCountyName1().equals("1")) {//未添加过城市
+
+                    data.setCountyName1(countyName);
+                    data.setCountyCode1(countyCode);
+                } else {
+                    data.setCountyName2(countyName);
+                    data.setCountyCode2(countyCode);
+                }
+
+                listView.setVisibility(View.VISIBLE);
+
+                //判断是不是显示一个城市还是两个城市
+                if (data.getCountyName2().equals("2")) {
+
+                    adapter.add(data.getCountyName1());
+                } else {
+
+                    for (int i = 0; i < 2; i++) {
+                        adapter.add(data.CountyName[i]);
+                    }
+                }
+            }
+        }else if(data.getCountyName2().equals("2")){
+
+            String countyCode = getIntent().getStringExtra("county_code");
+            String countyName = getIntent().getStringExtra("county_name");
+
+            //判断是不是第一次添加
+            if (data.getCountyName1().equals("1")) {//未添加过城市
+
+                data.setCountyName1(countyName);
+                data.setCountyCode1(countyCode);
+            } else {
+
+                data.setCountyName2(countyName);
+                data.setCountyCode2(countyCode);
+            }
+
             listView.setVisibility(View.VISIBLE);
-            adapter.add(countyCode);
 
+            //判断是不是显示一个城市还是两个城市
+            if (data.getCountyName2().equals("2")) {
+
+                adapter.add(data.getCountyName1());
+            } else {
+
+                for (int i = 0; i < 2; i++) {
+                    adapter.add(data.CountyName[i]);
+                }
+            }
+        }else{
+            String[] CountyName = data.getCountyName();
+            for (int i = 0; i < CountyName.length; i++) {
+                adapter.add(data.CountyName[i]);
+            }
         }
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Data data=(Data)getApplication();
-                String countyCode =getIntent().getStringExtra("county_code");
+                Data data = (Data) getApplication();
+                if(id==0){
+                String countyCode =data.getCountyCode1();
                 Log.i("-----",countyCode);
-                System.out.println("运行成功1");
-                if(isFromChooseAreaActivity){
+                Intent intent = new Intent(AddCityActivity.this,WeatherActivity.class);
+                intent.putExtra("county_code",countyCode);
+                startActivity(intent);
+                    //重置条件
 
-                    System.out.println("运行成功2");
-                    //String countyCode=data.getCountyCode();
+                }else if (id==1){
+                    String countyCode =data.getCountyCode2();
+                    Log.i("-----",countyCode);
+                    Intent intent = new Intent(AddCityActivity.this,WeatherActivity.class);
+                    intent.putExtra("county_code",countyCode);
+                    startActivity(intent);
+                    //重置条件
 
-                    //Log.i("111111111111111");
-                    addCountyList = coolWeatherDB.loadCounties(addCounties.getId());
-
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(0);
-                        Intent intent = new Intent(AddCityActivity.this,WeatherActivity.class);
-                        intent.putExtra("county_code",countyCode);
-                        startActivity(intent);
-                        finish();
 
                 }
-
-
+                finish();
 
             }
         });
@@ -104,14 +162,14 @@ public class AddCityActivity extends Activity implements View.OnClickListener{
 
     @Override
     public  void  onClick(View v){
-       switch (v.getId()){
-           case R.id.add_city:
+        switch (v.getId()){
+            case R.id.add_city:
 
-            Intent intent = new Intent(this,ChooseAreaActivity.class);
-            intent.putExtra("from_AddCity_Activity",true);
-            startActivity(intent);
-            finish();
-            break;
+                Intent intent = new Intent(this,ChooseAreaActivity.class);
+                intent.putExtra("from_AddCity_Activity",true);
+                startActivity(intent);
+                finish();
+                break;
 
 
             default:
